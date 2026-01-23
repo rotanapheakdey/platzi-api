@@ -1,0 +1,35 @@
+name: platzi_api
+description: A new Flutter project.
+publish_to: 'none'
+version: 1.0.0+1
+
+# 1. Environment goes here (Top Level)
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+# 2. Dependencies go here (All together)
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # API and State Management
+  provider: ^6.0.0
+  http: ^1.1.0
+
+  # Storage and Caching
+  shared_preferences: ^2.2.0
+  flutter_secure_storage: ^10.0.0
+  cached_network_image: ^3.3.0
+
+
+  skeletonizer: ^2.1.2  
+  # Icons
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
