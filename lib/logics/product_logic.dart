@@ -1,11 +1,16 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import '../models/product_model.dart';
 import '../services/product_service.dart';
 
 class ProductLogic extends ChangeNotifier {
   List<Product> _products = [];
   List<Product> get products => _products;
+
+  List<Category> _categories = [];
+  List<Category> get categories => _categories;
 
   bool _loading = false;
   bool get loading => _loading;
@@ -38,5 +43,20 @@ class ProductLogic extends ChangeNotifier {
     }
     _loading = false;
     notifyListeners();
+  }
+
+  Future<void> readCategories() async {
+    try {
+      var url = Uri.parse("https://api.escuelajs.co/api/v1/categories");
+      var response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        List data = jsonDecode(response.body);
+        _categories = data.map((e) => Category.fromJson(e)).toList();
+        notifyListeners(); // Update UI when data arrives
+      }
+    } catch (e) {
+      debugPrint("Error fetching categories: $e");
+    }
   }
 }
