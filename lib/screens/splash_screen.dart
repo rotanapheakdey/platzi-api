@@ -1,9 +1,6 @@
+// Example of what usually goes inside SplashScreen
 import 'package:flutter/material.dart';
-import '../apps/myapp.dart';
-import '../logics/product_logic.dart';
-import '../widgets/my_error.dart';
-import '../widgets/my_logo.dart';
-import 'package:provider/provider.dart';
+import 'main_screen.dart'; // Takes you to the main app
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,45 +10,22 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Future? _futureData;
-
   @override
   void initState() {
     super.initState();
-    _futureData = _loadData();
-  }
-
-  Future _loadData() async {
-    await Future.delayed(Duration(seconds: 2), () {});
-    return Future.any([context.read<ProductLogic>().readProductPagination()]);
+    // Wait 2 seconds, then go to MainScreen
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MainScreen()),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: _futureData == null
-          ? MyLogo(context)
-          : FutureBuilder(
-              future: _futureData,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return MyError(
-                    context,
-                    error: snapshot.error.toString(),
-                    onPressed: () {
-                      setState(() {
-                        _futureData = _loadData();
-                      });
-                    },
-                  );
-                }
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return MyApp();
-                } else {
-                  return MyLogo(context);
-                }
-              },
-            ),
+    return const Scaffold(
+      body: Center(child: CircularProgressIndicator()),
     );
   }
 }

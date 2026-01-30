@@ -1,30 +1,36 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import '../models/product_model.dart';
 
 class ProductService {
+  static const String _baseUrl = "https://api.escuelajs.co/api/v1";
 
-  final base = "https://api.escuelajs.co/api/v1";
-
-  Future<List<Product>> getProducts({int page = 0, int limit = 20}) async {
-
-    //page = 0, offset = 0 * 20 = 0, (page * limit)
-    //page = 1, offset = 1 * 20 = 20, (page * limit)
-    //page = 2, offset = 2 * 20 = 40, (page * limit)
-
-    int offset = page * limit;
-
-    final url = "$base/products?offset=$offset&limit=$limit";
-    http.Response response = await http.get(Uri.parse(url));
+  Future<List<Product>> getProducts({
+    required int page, 
+    int limit = 10, 
+    String categoryId = "-1"
+  }) async {
     try {
-      if (response.statusCode == 200) {
-        return compute(productFromJson, response.body);
+      String endpoint;
+      int offset = page * limit;
+
+      // Logic: If ID is -1, fetch ALL. Else, fetch specific Category.
+      if (categoryId == "-1" || categoryId == "0") {
+        endpoint = "$_baseUrl/products?offset=$offset&limit=$limit";
       } else {
-        throw Exception("Error status code: ${response.statusCode}");
+        endpoint = "$_baseUrl/categories/$categoryId/products?offset=$offset&limit=$limit";
       }
+
+      final uri = Uri.parse(endpoint);
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Product.fromJson(json)).toList();
+      }
+      return [];
     } catch (e) {
-      throw Exception("Network Error: ${e.toString()}");
+      return [];
     }
   }
 }
