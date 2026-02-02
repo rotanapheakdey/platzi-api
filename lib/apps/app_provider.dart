@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui'; 
 
-// IMPORTS (Check your file names, I saw 'categpry_logic' in your tree!)
+// 1. IMPORTS for ALL your Logics
 import '../logics/product_logic.dart';
-import '../logics/category_logic.dart'; // Make sure file is named category_logic.dart
-// import '../logics/search_product_logic.dart'; // Uncomment if you have this file
-// import '../logics/theme_logic.dart';          // Uncomment if you have this file
+import '../logics/category_logic.dart'; 
+import '../logics/search_product_logic.dart'; // <--- Was missing
+import '../logics/theme_logic.dart';          // <--- Was missing
+import '../logics/textsize_logic.dart';       // <--- Was missing
 
 import '../screens/splash_screen.dart';
 
@@ -26,13 +27,27 @@ class AppScrollBehavior extends MaterialScrollBehavior {
 Widget appProvider() {
   return MultiProvider(
     providers: [
+      // 2. Register ALL Logics here
       ChangeNotifierProvider(create: (_) => ProductLogic()),
       ChangeNotifierProvider(create: (_) => CategoryLogic()),
-      // Add other providers here if you have them in your 'logics' folder
-      // ChangeNotifierProvider(create: (_) => SearchProductLogic()),
-      // ChangeNotifierProvider(create: (_) => ThemeLogic()),
+      ChangeNotifierProvider(create: (_) => SearchProductLogic()), // <--- ADDED
+      ChangeNotifierProvider(create: (_) => ThemeLogic()),         // <--- ADDED
+      ChangeNotifierProvider(create: (_) => TextSizeLogic()),      // <--- ADDED
     ],
-    child: MaterialApp(
+    child: const MyApp(), // Separated MaterialApp into a widget for cleaner code
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // Watch ThemeLogic to switch between Light/Dark mode
+    // (If ThemeLogic isn't ready, remove 'context.watch' and use 'ThemeMode.system')
+    final themeMode = context.watch<ThemeLogic>().mode; 
+
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Ten11 Store',
       scrollBehavior: AppScrollBehavior(),
@@ -40,7 +55,9 @@ Widget appProvider() {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
         useMaterial3: true,
       ),
+      darkTheme: ThemeData.dark(useMaterial3: true), // Basic Dark Theme
+      themeMode: themeMode, 
       home: const SplashScreen(),
-    ),
-  );
+    );
+  }
 }
