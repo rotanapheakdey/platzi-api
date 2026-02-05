@@ -28,7 +28,6 @@ class ProductService {
       debugPrint("API CALL: $endpoint"); // <--- LOOK FOR THIS IN CONSOLE
 
       final response = await http.get(Uri.parse(endpoint));
-
       if (response.statusCode == 200) {
         List<dynamic> jsonList = jsonDecode(response.body);
         return jsonList.map((json) => Product.fromJson(json)).toList();

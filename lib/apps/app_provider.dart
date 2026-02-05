@@ -8,6 +8,7 @@ import '../logics/category_logic.dart';
 import '../logics/search_product_logic.dart'; // <--- Was missing
 import '../logics/theme_logic.dart';          // <--- Was missing
 import '../logics/textsize_logic.dart';       // <--- Was missing
+import '../logics/auth_logic.dart';
 
 import '../screens/splash_screen.dart';
 
@@ -30,9 +31,10 @@ Widget appProvider() {
       // 2. Register ALL Logics here
       ChangeNotifierProvider(create: (_) => ProductLogic()),
       ChangeNotifierProvider(create: (_) => CategoryLogic()),
-      ChangeNotifierProvider(create: (_) => SearchProductLogic()), // <--- ADDED
-      ChangeNotifierProvider(create: (_) => ThemeLogic()),         // <--- ADDED
-      ChangeNotifierProvider(create: (_) => TextSizeLogic()),      // <--- ADDED
+      ChangeNotifierProvider(create: (_) => SearchProductLogic()), 
+      ChangeNotifierProvider(create: (_) => ThemeLogic()),         
+      ChangeNotifierProvider(create: (_) => TextSizeLogic()),    
+      ChangeNotifierProvider(create: (_) => AuthLogic()),  
     ],
     child: const MyApp(), // Separated MaterialApp into a widget for cleaner code
   );
@@ -60,4 +62,5 @@ class MyApp extends StatelessWidget {
       home: const SplashScreen(),
     );
   }
+
 }

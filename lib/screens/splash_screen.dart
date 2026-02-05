@@ -1,6 +1,6 @@
 // Example of what usually goes inside SplashScreen
 import 'package:flutter/material.dart';
-import 'main_screen.dart'; // Takes you to the main app
+import 'login_screen.dart'; // Takes you to the main app
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainScreen()),
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
     });
   }
